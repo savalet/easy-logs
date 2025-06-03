@@ -15,7 +15,8 @@
     "logger",
     "log"
   ],
-  "author": "Savalet",
+  "author": "savalet",
+  "contributors": ["savalet", "kayaabadev"],
   "license": "MIT",
   "dependencies": {
     "fs": "^0.0.1-security",

@@ -22,15 +22,15 @@ function formatDate(date) {
 function getLevelName(level) {
     switch (level) {
         case 0:
-            return 'ERROR';
+            return '\x1b[31mERROR\x1b[37m';
         case 1:
-            return 'WARN';
+            return '\x1b[33mWARN\x1b[37m';
         case 2:
-            return 'INFO';
+            return '\x1b[36mINFO\x1b[37m';
         case 3:
-            return 'DEBUG';
+            return '\x1b[36mDEBUG\x1b[37m';
         default:
-            return 'UNKNOWN';
+            return '\x1b[32mUNKNOWN\x1b[37m';
     }
 }
 
@@ -39,14 +39,19 @@ function getFormattedMessage(level, message) {
     const levelName = getLevelName(level);
     const formattedDate = formatDate(date);
 
-    return `[${formattedDate}] (${levelName}) ${message}`;
+    return `[\x1b[30m${formattedDate}\x1b[37m] (${levelName}) ${message}`;
+}
+function removeAnsiCodes(text) {
+    const ansiEscape = /\x1b\[\d{1,3}m/g;
+    return text.replace(ansiEscape, '');
 }
 
 function log(level, message) {
     const formattedMessage = getFormattedMessage(level, message);
+    const formattedMessageInFile = removeAnsiCodes(formattedMessage);
     const filePath = path.join(LOG_DIRECTORY, `${formatDate(new Date()).substr(0, 10)}.log`);
     console.log(formattedMessage);
-    fs.appendFileSync(filePath, formattedMessage + '\n');
+    fs.appendFileSync(filePath, formattedMessageInFile + '\n');
 }
 
 module.exports = {
